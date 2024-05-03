@@ -1,0 +1,98 @@
+
+<head>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://use.typekit.net/juw2amj.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <meta charset="utf-8">
+    
+    <title>Kaktus</title>
+    
+</head>
+<body style="display: flex;flex-direction: column;">
+    <nav class="topbar" style="height:4%;display: flex;">
+        <text>Kaktus</text>
+        
+    </nav>
+    <div class="centerarea" style="height:86%;display:flex;flex-direction: row;">
+
+    <!-- ** This area is dynamic -->
+    <div class="channels inter" style="width:5%;display: flex;flex-direction: column;">
+    
+        <chn style="height: 5%;background-color:#F0DE54;color:#000;line-height: 100%;text-align: center;">кн</chn>
+    
+    
+    </div>
+    <div class="chats inter" style="width:15%;display: flex;flex-direction: column;gap: 2%;">
+        <form method="POST" action="/openchat/chatID" id="chatform" style="display: none;"><input name="chatID" id="chatID" readonly><input name="newmessage" id="newmessage" readonly></form>
+
+        <group class="inter" onclick="connectChat(1)">:dev-chat [unlocated]</group>
+        <%- userData.chats %>
+    
+    </div>
+        <!-- SECTION MessageArea -->
+    <div class="messagearea inter" style="width:80%;display: flex;flex-direction: column;">
+        <div style="display: flex;flex-direction: row;height: 5%;">
+            <input name="srch-sel" id="searchselector" class="inter" placeholder=":main" style="width:5%;text-align: center;" readonly>
+            <input class="searchbar inter" style="width:20%; background-color: #F0DE54;margin-left:2%" placeholder="Пошук в <тут плейс>">
+        </div>
+        <div id="message-container" class="inter" style="height: 88%;padding-top: 2vh;padding-bottom: 2vh;display: flex;flex-direction: column;">
+            
+            <%- userData.messages %>
+        
+        
+        </div>
+        <input id="messagebar" class="messagebar inter" style="height: 7%;" placeholder="Написати у :main" autofocus>
+    
+    </div>
+
+    </div>
+
+    <div class="bottomarea" style="height:10%;display:flex">
+        <pfp style="width:5%;"></pfp>
+
+        <div class="pf-info" style="width: 15%;">
+            <fieldset style="outline: none;border-color: transparent;display:flex;flex-direction: column;padding-top:1vh;padding-left:1vw">
+                <field class="username-tag-level inter"><us><%= userData.username %></us><n>&nbsp;&nbsp;</n><tg class="inter" style="font-size:60%;color:lightgray"><%= userData.tag %></tg><n>&nbsp;</n><lvl></lvl></field>
+                <field class="lib inter" style="font-size: 60%;color:lightgreen">в мережі</field>
+                <field class="level inter" style="font-size: 60%;color:bisque">Авантюрист [1]</field>
+            </fieldset>
+        </div>
+
+        <div class="app-bar" style="width: 80%;">a</div>
+    </div>
+
+</body>
+
+<script>
+let chatForm = document.getElementById('chatform')
+let chatid = document.getElementById('chatID')
+
+function connectChat(id) {
+    chatForm.action = `/openchat/${id}`;
+    chatid.value = id;
+    chatForm.submit()
+}
+
+
+// >> Keystroke
+let newmessage = document.getElementById('newmessage')
+
+
+function handleShortcut(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        let currentUrlsbs = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+        if (currentUrlsbs != 'main' && currentUrlsbs != 'settings') {
+            console.log(document.getElementById('messagebar').value.replace('/"/g', '\\"'))
+            newmessage.value = document.getElementById('messagebar').value.replace('/"/g', '\\"')
+            connectChat(currentUrlsbs)
+            newmessage.value = '';
+        }
+    }
+}
+document.addEventListener("keydown", handleShortcut);
+
+
+</script>
